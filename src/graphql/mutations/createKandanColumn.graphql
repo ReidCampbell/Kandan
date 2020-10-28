@@ -1,0 +1,5 @@
+mutation CreateKandanColumn($boardId: Int!, $title: String!) {
+  createKandanColumn(boardId: $boardId, title: $title) {
+    title
+  }
+}

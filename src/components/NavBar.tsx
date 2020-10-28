@@ -69,7 +69,8 @@ const NavBar: React.FC<NavBarProps> = ({}) => {
       <Box bg='white' boxShadow='lg' p={4} position='sticky' top={0} zIndex={1}>
         <Flex mx='auto' maxWidth='800px' align='center'>
           <NextLink href='/'>
-            <Image src='/Reidditlogo.png' h='50px' cursor='pointer' />
+            {/* <Image src='/Reidditlogo.png' h='50px' cursor='pointer' /> */}
+            KANDAN
           </NextLink>
           <Box ml='auto'>{body}</Box>
         </Flex>

@@ -25,30 +25,30 @@ const User: React.FC = ({}) => {
     );
   }
 
-  const uploadFile = async (e: any) => {
-    console.log('Uploading....');
+  // const uploadFile = async (e: any) => {
+  //   console.log('Uploading....');
 
-    const files = e.target.files;
-    const formData = new FormData();
-    formData.append('file', files[0]);
-    formData.append('upload_preset', 'reiddit');
-    const res = await fetch(
-      'https://api.cloudinary.com/v1_1/dkzdgf49j/upload',
-      {
-        method: 'POST',
-        body: formData,
-      }
-    );
+  //   const files = e.target.files;
+  //   const formData = new FormData();
+  //   formData.append('file', files[0]);
+  //   formData.append('upload_preset', 'kandan');
+  //   const res = await fetch(
+  //     'https://api.cloudinary.com/v1_1/dkzdgf49j/upload',
+  //     {
+  //       method: 'POST',
+  //       body: formData,
+  //     }
+  //   );
 
-    const file = await res.json();
+  //   const file = await res.json();
 
-    await uploadAvatar({
-      variables: { avatar: file.url },
-      update: cache => {
-        cache.evict({ fieldName: 'posts:{}' });
-      },
-    }).catch(e => console.log(e));
-  };
+  //   await uploadAvatar({
+  //     variables: { avatar: file.url },
+  //     update: cache => {
+  //       cache.evict({ fieldName: 'posts:{}' });
+  //     },
+  //   }).catch(e => console.log(e));
+  // };
 
   return (
     <>
@@ -76,7 +76,7 @@ const User: React.FC = ({}) => {
                 name='file'
                 placeholder='Upload Image'
                 required
-                onChange={uploadFile}
+                // onChange={uploadFile}
               />
             </label>
           </fieldset>

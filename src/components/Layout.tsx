@@ -4,20 +4,20 @@ import React from 'react';
 import NavBar from './NavBar';
 import Wrapper, { WrapperProps } from './Wrapper';
 
-const Layout: React.FC<WrapperProps> = ({ client, refetch, children }) => {
+interface LayoutProps {}
+
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <>
       <Head>
-        <title>Reiddit</title>
+        <title>Kandan</title>
         <meta charSet='utf-8' />
         <meta name='viewport' content='initial-scale=1.0, width=device-width' />
         <link rel='icon' type='image/png' href='/favicon.png' />
       </Head>
       <Box h='100%' backgroundColor='#fcfcfc'>
         <NavBar />
-        <Wrapper client={client} refetch={refetch}>
-          {children}
-        </Wrapper>
+        <Wrapper>{children}</Wrapper>
       </Box>
     </>
   );

@@ -1,0 +1,21 @@
+query board($id: Int!) {
+  board(id: $id) {
+    title
+    creatorId
+    creator {
+      username
+    }
+    kandanColumns {
+      id
+      title
+      tickets {
+        id
+        kandanColumnId
+        title
+        comments {
+          text
+        }
+      }
+    }
+  }
+}

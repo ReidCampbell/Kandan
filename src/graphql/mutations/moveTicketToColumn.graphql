@@ -1,0 +1,6 @@
+mutation moveTicketToColumn($id: Int!, $kandanColumnId: Int!) {
+  moveTicketToColumn(id: $id, kandanColumnId: $kandanColumnId) {
+    id
+    kandanColumnId
+  }
+}

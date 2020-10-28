@@ -13,32 +13,20 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  me?: Maybe<User>;
-  users: Array<User>;
-  posts: PaginatedPosts;
-  post?: Maybe<Post>;
   comments: PaginatedComments;
   comment?: Maybe<Comment>;
-  replies: PaginatedReplies;
-  reply?: Maybe<Reply>;
-};
-
-
-export type QueryPostsArgs = {
-  cursor?: Maybe<Scalars['String']>;
-  order: Scalars['String'];
-  column: Scalars['String'];
-  limit: Scalars['Int'];
-};
-
-
-export type QueryPostArgs = {
-  id: Scalars['Int'];
+  board?: Maybe<Board>;
+  tickets: Array<Ticket>;
+  ticket?: Maybe<Ticket>;
+  kandanColumns: Array<KandanColumn>;
+  kandanColumn?: Maybe<KandanColumn>;
+  me?: Maybe<User>;
+  users: Array<User>;
 };
 
 
 export type QueryCommentsArgs = {
-  postId: Scalars['Int'];
+  ticketId: Scalars['Int'];
   limit: Scalars['Int'];
 };
 
@@ -48,14 +36,46 @@ export type QueryCommentArgs = {
 };
 
 
-export type QueryRepliesArgs = {
-  commentId: Scalars['Int'];
-  limit: Scalars['Int'];
+export type QueryBoardArgs = {
+  id: Scalars['Int'];
 };
 
 
-export type QueryReplyArgs = {
+export type QueryTicketsArgs = {
+  kandanColumnId: Scalars['Int'];
+};
+
+
+export type QueryTicketArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryKandanColumnsArgs = {
+  boardId: Scalars['Int'];
+};
+
+
+export type QueryKandanColumnArgs = {
+  id: Scalars['Int'];
+};
+
+export type PaginatedComments = {
+  __typename?: 'PaginatedComments';
+  comments: Array<Comment>;
+  hasMore: Scalars['Boolean'];
+};
+
+export type Comment = {
+  __typename?: 'Comment';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  text: Scalars['String'];
+  creatorId: Scalars['Float'];
+  ticketId: Scalars['Float'];
+  creator: User;
+  ticket: Ticket;
 };
 
 export type User = {
@@ -66,86 +86,140 @@ export type User = {
   username: Scalars['String'];
   email: Scalars['String'];
   avatar?: Maybe<Scalars['String']>;
+  boardId?: Maybe<Scalars['Int']>;
 };
 
-export type PaginatedPosts = {
-  __typename?: 'PaginatedPosts';
-  posts: Array<Post>;
-  hasMore: Scalars['Boolean'];
-};
-
-export type Post = {
-  __typename?: 'Post';
+export type Ticket = {
+  __typename?: 'Ticket';
   id: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   title: Scalars['String'];
-  text: Scalars['String'];
-  points: Scalars['Float'];
+  description: Scalars['String'];
   creatorId: Scalars['Float'];
+  kandanColumnId: Scalars['Float'];
   creator: User;
-  voteStatus?: Maybe<Scalars['Int']>;
+  kandanColumn: KandanColumn;
   comments?: Maybe<Array<Comment>>;
   textSnippet: Scalars['String'];
 };
 
-export type Comment = {
-  __typename?: 'Comment';
+export type KandanColumn = {
+  __typename?: 'KandanColumn';
   id: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  text: Scalars['String'];
-  points: Scalars['Float'];
-  creatorId: Scalars['Float'];
-  postId: Scalars['Float'];
-  creator: User;
-  post: Post;
-  replies?: Maybe<Array<Reply>>;
+  title: Scalars['String'];
+  boardId: Scalars['Float'];
+  board: Board;
+  tickets?: Maybe<Array<Ticket>>;
 };
 
-export type Reply = {
-  __typename?: 'Reply';
+export type Board = {
+  __typename?: 'Board';
   id: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  text: Scalars['String'];
-  commentOrReply: Scalars['String'];
+  title: Scalars['String'];
   creatorId: Scalars['Float'];
-  commentId: Scalars['Float'];
+  kandanColumns?: Maybe<Array<KandanColumn>>;
   creator: User;
-  comment: Comment;
-};
-
-export type PaginatedComments = {
-  __typename?: 'PaginatedComments';
-  comments: Array<Comment>;
-  hasMore: Scalars['Boolean'];
-};
-
-export type PaginatedReplies = {
-  __typename?: 'PaginatedReplies';
-  replies: Array<Reply>;
-  hasMore: Scalars['Boolean'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createComment: Comment;
+  updateComment?: Maybe<Comment>;
+  deleteComment: Scalars['Boolean'];
+  createBoard: Board;
+  updateBoard?: Maybe<Board>;
+  deleteBoard: Scalars['Boolean'];
+  moveTicketToColumn: Ticket;
+  createTicket: Ticket;
+  updateTicket?: Maybe<Ticket>;
+  deleteTicket: Scalars['Boolean'];
+  createKandanColumn: KandanColumn;
+  updateKandanColumn?: Maybe<KandanColumn>;
+  deleteKandanColumn: Scalars['Boolean'];
   uploadAvatar: Scalars['String'];
   changePassword: UserResponse;
   forgotPassword: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
-  vote: Scalars['Boolean'];
-  createPost: Post;
-  updatePost?: Maybe<Post>;
-  deletePost: Scalars['Boolean'];
-  createComment: Comment;
-  updateComment?: Maybe<Comment>;
-  deleteComment: Scalars['Boolean'];
-  createReply: Reply;
-  updateReply?: Maybe<Reply>;
-  deleteReply: Scalars['Boolean'];
+};
+
+
+export type MutationCreateCommentArgs = {
+  text: Scalars['String'];
+  ticketId: Scalars['Int'];
+};
+
+
+export type MutationUpdateCommentArgs = {
+  text: Scalars['String'];
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteCommentArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationCreateBoardArgs = {
+  input: BoardInput;
+};
+
+
+export type MutationUpdateBoardArgs = {
+  title: Scalars['String'];
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteBoardArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationMoveTicketToColumnArgs = {
+  kandanColumnId: Scalars['Int'];
+  id: Scalars['Int'];
+};
+
+
+export type MutationCreateTicketArgs = {
+  input: TicketInput;
+};
+
+
+export type MutationUpdateTicketArgs = {
+  text: Scalars['String'];
+  title: Scalars['String'];
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteTicketArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationCreateKandanColumnArgs = {
+  boardId: Scalars['Int'];
+  title: Scalars['String'];
+};
+
+
+export type MutationUpdateKandanColumnArgs = {
+  title: Scalars['String'];
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteKandanColumnArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -175,62 +249,14 @@ export type MutationLoginArgs = {
   usernameOrEmail: Scalars['String'];
 };
 
-
-export type MutationVoteArgs = {
-  value: Scalars['Int'];
-  postId: Scalars['Int'];
-};
-
-
-export type MutationCreatePostArgs = {
-  input: PostInput;
-};
-
-
-export type MutationUpdatePostArgs = {
-  text: Scalars['String'];
+export type BoardInput = {
   title: Scalars['String'];
-  id: Scalars['Int'];
 };
 
-
-export type MutationDeletePostArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationCreateCommentArgs = {
-  text: Scalars['String'];
-  postId: Scalars['Int'];
-};
-
-
-export type MutationUpdateCommentArgs = {
-  text: Scalars['String'];
-  id: Scalars['Int'];
-};
-
-
-export type MutationDeleteCommentArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationCreateReplyArgs = {
-  commentOrReply: Scalars['String'];
-  text: Scalars['String'];
-  commentId: Scalars['Int'];
-};
-
-
-export type MutationUpdateReplyArgs = {
-  text: Scalars['String'];
-  id: Scalars['Int'];
-};
-
-
-export type MutationDeleteReplyArgs = {
-  id: Scalars['Int'];
+export type TicketInput = {
+  title: Scalars['String'];
+  description: Scalars['String'];
+  kandanColumnId: Scalars['Float'];
 };
 
 export type UserResponse = {
@@ -250,27 +276,6 @@ export type UsernamePasswordInput = {
   email: Scalars['String'];
   password: Scalars['String'];
 };
-
-export type PostInput = {
-  title: Scalars['String'];
-  text: Scalars['String'];
-};
-
-export type PostSnippetFragment = (
-  { __typename?: 'Post' }
-  & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'textSnippet' | 'voteStatus' | 'creatorId'>
-  & { creator: (
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'username' | 'avatar'>
-  ), comments?: Maybe<Array<(
-    { __typename?: 'Comment' }
-    & Pick<Comment, 'id'>
-    & { replies?: Maybe<Array<(
-      { __typename?: 'Reply' }
-      & Pick<Reply, 'id'>
-    )>> }
-  )>> }
-);
 
 export type RegularErrorFragment = (
   { __typename?: 'FieldError' }
@@ -313,56 +318,31 @@ export type ChangePasswordMutation = (
   ) }
 );
 
-export type CreateCommentMutationVariables = Exact<{
-  text: Scalars['String'];
-  postId: Scalars['Int'];
+export type CreateKandanColumnMutationVariables = Exact<{
+  boardId: Scalars['Int'];
+  title: Scalars['String'];
 }>;
 
 
-export type CreateCommentMutation = (
+export type CreateKandanColumnMutation = (
   { __typename?: 'Mutation' }
-  & { createComment: (
-    { __typename?: 'Comment' }
-    & Pick<Comment, 'text'>
+  & { createKandanColumn: (
+    { __typename?: 'KandanColumn' }
+    & Pick<KandanColumn, 'title'>
   ) }
 );
 
-export type CreatePostMutationVariables = Exact<{
-  input: PostInput;
+export type CreateTicketMutationVariables = Exact<{
+  input: TicketInput;
 }>;
 
 
-export type CreatePostMutation = (
+export type CreateTicketMutation = (
   { __typename?: 'Mutation' }
-  & { createPost: (
-    { __typename?: 'Post' }
-    & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'text' | 'points' | 'creatorId'>
+  & { createTicket: (
+    { __typename?: 'Ticket' }
+    & Pick<Ticket, 'title' | 'description'>
   ) }
-);
-
-export type CreateReplyMutationVariables = Exact<{
-  text: Scalars['String'];
-  commentId: Scalars['Int'];
-  commentOrReply: Scalars['String'];
-}>;
-
-
-export type CreateReplyMutation = (
-  { __typename?: 'Mutation' }
-  & { createReply: (
-    { __typename?: 'Reply' }
-    & Pick<Reply, 'text' | 'commentId'>
-  ) }
-);
-
-export type DeletePostMutationVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type DeletePostMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'deletePost'>
 );
 
 export type ForgotPasswordMutationVariables = Exact<{
@@ -397,6 +377,20 @@ export type LogoutMutation = (
   & Pick<Mutation, 'logout'>
 );
 
+export type MoveTicketToColumnMutationVariables = Exact<{
+  id: Scalars['Int'];
+  kandanColumnId: Scalars['Int'];
+}>;
+
+
+export type MoveTicketToColumnMutation = (
+  { __typename?: 'Mutation' }
+  & { moveTicketToColumn: (
+    { __typename?: 'Ticket' }
+    & Pick<Ticket, 'id' | 'kandanColumnId'>
+  ) }
+);
+
 export type RegisterMutationVariables = Exact<{
   options: UsernamePasswordInput;
 }>;
@@ -410,21 +404,6 @@ export type RegisterMutation = (
   ) }
 );
 
-export type UpdatePostMutationVariables = Exact<{
-  id: Scalars['Int'];
-  title: Scalars['String'];
-  text: Scalars['String'];
-}>;
-
-
-export type UpdatePostMutation = (
-  { __typename?: 'Mutation' }
-  & { updatePost?: Maybe<(
-    { __typename?: 'Post' }
-    & Pick<Post, 'id' | 'title' | 'text' | 'textSnippet'>
-  )> }
-);
-
 export type UploadAvatarMutationVariables = Exact<{
   avatar: Scalars['String'];
 }>;
@@ -435,15 +414,32 @@ export type UploadAvatarMutation = (
   & Pick<Mutation, 'uploadAvatar'>
 );
 
-export type VoteMutationVariables = Exact<{
-  value: Scalars['Int'];
-  postId: Scalars['Int'];
+export type BoardQueryVariables = Exact<{
+  id: Scalars['Int'];
 }>;
 
 
-export type VoteMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'vote'>
+export type BoardQuery = (
+  { __typename?: 'Query' }
+  & { board?: Maybe<(
+    { __typename?: 'Board' }
+    & Pick<Board, 'title' | 'creatorId'>
+    & { creator: (
+      { __typename?: 'User' }
+      & Pick<User, 'username'>
+    ), kandanColumns?: Maybe<Array<(
+      { __typename?: 'KandanColumn' }
+      & Pick<KandanColumn, 'id' | 'title'>
+      & { tickets?: Maybe<Array<(
+        { __typename?: 'Ticket' }
+        & Pick<Ticket, 'id' | 'kandanColumnId' | 'title'>
+        & { comments?: Maybe<Array<(
+          { __typename?: 'Comment' }
+          & Pick<Comment, 'text'>
+        )>> }
+      )>> }
+    )>> }
+  )> }
 );
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
@@ -457,80 +453,6 @@ export type MeQuery = (
   )> }
 );
 
-export type PostQueryVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type PostQuery = (
-  { __typename?: 'Query' }
-  & { post?: Maybe<(
-    { __typename?: 'Post' }
-    & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'points' | 'text' | 'voteStatus'>
-    & { creator: (
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'username' | 'avatar'>
-    ), comments?: Maybe<Array<(
-      { __typename?: 'Comment' }
-      & Pick<Comment, 'id' | 'text' | 'createdAt' | 'updatedAt' | 'points'>
-      & { creator: (
-        { __typename?: 'User' }
-        & Pick<User, 'username' | 'avatar'>
-      ), replies?: Maybe<Array<(
-        { __typename?: 'Reply' }
-        & Pick<Reply, 'id' | 'text' | 'createdAt' | 'updatedAt'>
-        & { creator: (
-          { __typename?: 'User' }
-          & Pick<User, 'username' | 'avatar'>
-        ) }
-      )>> }
-    )>> }
-  )> }
-);
-
-export type PostsQueryVariables = Exact<{
-  limit: Scalars['Int'];
-  column: Scalars['String'];
-  order: Scalars['String'];
-  cursor?: Maybe<Scalars['String']>;
-}>;
-
-
-export type PostsQuery = (
-  { __typename?: 'Query' }
-  & { posts: (
-    { __typename?: 'PaginatedPosts' }
-    & Pick<PaginatedPosts, 'hasMore'>
-    & { posts: Array<(
-      { __typename?: 'Post' }
-      & PostSnippetFragment
-    )> }
-  ) }
-);
-
-export const PostSnippetFragmentDoc = gql`
-    fragment PostSnippet on Post {
-  id
-  createdAt
-  updatedAt
-  title
-  points
-  textSnippet
-  voteStatus
-  creator {
-    id
-    username
-    avatar
-  }
-  creatorId
-  comments {
-    id
-    replies {
-      id
-    }
-  }
-}
-    `;
 export const RegularErrorFragmentDoc = gql`
     fragment RegularError on FieldError {
   field
@@ -594,142 +516,72 @@ export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptio
 export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
-export const CreateCommentDocument = gql`
-    mutation CreateComment($text: String!, $postId: Int!) {
-  createComment(text: $text, postId: $postId) {
-    text
+export const CreateKandanColumnDocument = gql`
+    mutation CreateKandanColumn($boardId: Int!, $title: String!) {
+  createKandanColumn(boardId: $boardId, title: $title) {
+    title
   }
 }
     `;
-export type CreateCommentMutationFn = Apollo.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
+export type CreateKandanColumnMutationFn = Apollo.MutationFunction<CreateKandanColumnMutation, CreateKandanColumnMutationVariables>;
 
 /**
- * __useCreateCommentMutation__
+ * __useCreateKandanColumnMutation__
  *
- * To run a mutation, you first call `useCreateCommentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateCommentMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateKandanColumnMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateKandanColumnMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createCommentMutation, { data, loading, error }] = useCreateCommentMutation({
+ * const [createKandanColumnMutation, { data, loading, error }] = useCreateKandanColumnMutation({
  *   variables: {
- *      text: // value for 'text'
- *      postId: // value for 'postId'
+ *      boardId: // value for 'boardId'
+ *      title: // value for 'title'
  *   },
  * });
  */
-export function useCreateCommentMutation(baseOptions?: Apollo.MutationHookOptions<CreateCommentMutation, CreateCommentMutationVariables>) {
-        return Apollo.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument, baseOptions);
+export function useCreateKandanColumnMutation(baseOptions?: Apollo.MutationHookOptions<CreateKandanColumnMutation, CreateKandanColumnMutationVariables>) {
+        return Apollo.useMutation<CreateKandanColumnMutation, CreateKandanColumnMutationVariables>(CreateKandanColumnDocument, baseOptions);
       }
-export type CreateCommentMutationHookResult = ReturnType<typeof useCreateCommentMutation>;
-export type CreateCommentMutationResult = Apollo.MutationResult<CreateCommentMutation>;
-export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<CreateCommentMutation, CreateCommentMutationVariables>;
-export const CreatePostDocument = gql`
-    mutation CreatePost($input: PostInput!) {
-  createPost(input: $input) {
-    id
-    createdAt
-    updatedAt
+export type CreateKandanColumnMutationHookResult = ReturnType<typeof useCreateKandanColumnMutation>;
+export type CreateKandanColumnMutationResult = Apollo.MutationResult<CreateKandanColumnMutation>;
+export type CreateKandanColumnMutationOptions = Apollo.BaseMutationOptions<CreateKandanColumnMutation, CreateKandanColumnMutationVariables>;
+export const CreateTicketDocument = gql`
+    mutation createTicket($input: TicketInput!) {
+  createTicket(input: $input) {
     title
-    text
-    points
-    creatorId
+    description
   }
 }
     `;
-export type CreatePostMutationFn = Apollo.MutationFunction<CreatePostMutation, CreatePostMutationVariables>;
+export type CreateTicketMutationFn = Apollo.MutationFunction<CreateTicketMutation, CreateTicketMutationVariables>;
 
 /**
- * __useCreatePostMutation__
+ * __useCreateTicketMutation__
  *
- * To run a mutation, you first call `useCreatePostMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreatePostMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateTicketMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTicketMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createPostMutation, { data, loading, error }] = useCreatePostMutation({
+ * const [createTicketMutation, { data, loading, error }] = useCreateTicketMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<CreatePostMutation, CreatePostMutationVariables>) {
-        return Apollo.useMutation<CreatePostMutation, CreatePostMutationVariables>(CreatePostDocument, baseOptions);
+export function useCreateTicketMutation(baseOptions?: Apollo.MutationHookOptions<CreateTicketMutation, CreateTicketMutationVariables>) {
+        return Apollo.useMutation<CreateTicketMutation, CreateTicketMutationVariables>(CreateTicketDocument, baseOptions);
       }
-export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
-export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
-export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
-export const CreateReplyDocument = gql`
-    mutation CreateReply($text: String!, $commentId: Int!, $commentOrReply: String!) {
-  createReply(text: $text, commentId: $commentId, commentOrReply: $commentOrReply) {
-    text
-    commentId
-  }
-}
-    `;
-export type CreateReplyMutationFn = Apollo.MutationFunction<CreateReplyMutation, CreateReplyMutationVariables>;
-
-/**
- * __useCreateReplyMutation__
- *
- * To run a mutation, you first call `useCreateReplyMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateReplyMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createReplyMutation, { data, loading, error }] = useCreateReplyMutation({
- *   variables: {
- *      text: // value for 'text'
- *      commentId: // value for 'commentId'
- *      commentOrReply: // value for 'commentOrReply'
- *   },
- * });
- */
-export function useCreateReplyMutation(baseOptions?: Apollo.MutationHookOptions<CreateReplyMutation, CreateReplyMutationVariables>) {
-        return Apollo.useMutation<CreateReplyMutation, CreateReplyMutationVariables>(CreateReplyDocument, baseOptions);
-      }
-export type CreateReplyMutationHookResult = ReturnType<typeof useCreateReplyMutation>;
-export type CreateReplyMutationResult = Apollo.MutationResult<CreateReplyMutation>;
-export type CreateReplyMutationOptions = Apollo.BaseMutationOptions<CreateReplyMutation, CreateReplyMutationVariables>;
-export const DeletePostDocument = gql`
-    mutation DeletePost($id: Int!) {
-  deletePost(id: $id)
-}
-    `;
-export type DeletePostMutationFn = Apollo.MutationFunction<DeletePostMutation, DeletePostMutationVariables>;
-
-/**
- * __useDeletePostMutation__
- *
- * To run a mutation, you first call `useDeletePostMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeletePostMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deletePostMutation, { data, loading, error }] = useDeletePostMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeletePostMutation(baseOptions?: Apollo.MutationHookOptions<DeletePostMutation, DeletePostMutationVariables>) {
-        return Apollo.useMutation<DeletePostMutation, DeletePostMutationVariables>(DeletePostDocument, baseOptions);
-      }
-export type DeletePostMutationHookResult = ReturnType<typeof useDeletePostMutation>;
-export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
-export type DeletePostMutationOptions = Apollo.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
+export type CreateTicketMutationHookResult = ReturnType<typeof useCreateTicketMutation>;
+export type CreateTicketMutationResult = Apollo.MutationResult<CreateTicketMutation>;
+export type CreateTicketMutationOptions = Apollo.BaseMutationOptions<CreateTicketMutation, CreateTicketMutationVariables>;
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
   forgotPassword(email: $email)
@@ -822,6 +674,40 @@ export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<Logou
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
+export const MoveTicketToColumnDocument = gql`
+    mutation moveTicketToColumn($id: Int!, $kandanColumnId: Int!) {
+  moveTicketToColumn(id: $id, kandanColumnId: $kandanColumnId) {
+    id
+    kandanColumnId
+  }
+}
+    `;
+export type MoveTicketToColumnMutationFn = Apollo.MutationFunction<MoveTicketToColumnMutation, MoveTicketToColumnMutationVariables>;
+
+/**
+ * __useMoveTicketToColumnMutation__
+ *
+ * To run a mutation, you first call `useMoveTicketToColumnMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMoveTicketToColumnMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [moveTicketToColumnMutation, { data, loading, error }] = useMoveTicketToColumnMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      kandanColumnId: // value for 'kandanColumnId'
+ *   },
+ * });
+ */
+export function useMoveTicketToColumnMutation(baseOptions?: Apollo.MutationHookOptions<MoveTicketToColumnMutation, MoveTicketToColumnMutationVariables>) {
+        return Apollo.useMutation<MoveTicketToColumnMutation, MoveTicketToColumnMutationVariables>(MoveTicketToColumnDocument, baseOptions);
+      }
+export type MoveTicketToColumnMutationHookResult = ReturnType<typeof useMoveTicketToColumnMutation>;
+export type MoveTicketToColumnMutationResult = Apollo.MutationResult<MoveTicketToColumnMutation>;
+export type MoveTicketToColumnMutationOptions = Apollo.BaseMutationOptions<MoveTicketToColumnMutation, MoveTicketToColumnMutationVariables>;
 export const RegisterDocument = gql`
     mutation Register($options: UsernamePasswordInput!) {
   register(options: $options) {
@@ -854,43 +740,6 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
-export const UpdatePostDocument = gql`
-    mutation UpdatePost($id: Int!, $title: String!, $text: String!) {
-  updatePost(id: $id, title: $title, text: $text) {
-    id
-    title
-    text
-    textSnippet
-  }
-}
-    `;
-export type UpdatePostMutationFn = Apollo.MutationFunction<UpdatePostMutation, UpdatePostMutationVariables>;
-
-/**
- * __useUpdatePostMutation__
- *
- * To run a mutation, you first call `useUpdatePostMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdatePostMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updatePostMutation, { data, loading, error }] = useUpdatePostMutation({
- *   variables: {
- *      id: // value for 'id'
- *      title: // value for 'title'
- *      text: // value for 'text'
- *   },
- * });
- */
-export function useUpdatePostMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePostMutation, UpdatePostMutationVariables>) {
-        return Apollo.useMutation<UpdatePostMutation, UpdatePostMutationVariables>(UpdatePostDocument, baseOptions);
-      }
-export type UpdatePostMutationHookResult = ReturnType<typeof useUpdatePostMutation>;
-export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>;
-export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
 export const UploadAvatarDocument = gql`
     mutation uploadAvatar($avatar: String!) {
   uploadAvatar(avatar: $avatar)
@@ -921,37 +770,55 @@ export function useUploadAvatarMutation(baseOptions?: Apollo.MutationHookOptions
 export type UploadAvatarMutationHookResult = ReturnType<typeof useUploadAvatarMutation>;
 export type UploadAvatarMutationResult = Apollo.MutationResult<UploadAvatarMutation>;
 export type UploadAvatarMutationOptions = Apollo.BaseMutationOptions<UploadAvatarMutation, UploadAvatarMutationVariables>;
-export const VoteDocument = gql`
-    mutation Vote($value: Int!, $postId: Int!) {
-  vote(value: $value, postId: $postId)
+export const BoardDocument = gql`
+    query board($id: Int!) {
+  board(id: $id) {
+    title
+    creatorId
+    creator {
+      username
+    }
+    kandanColumns {
+      id
+      title
+      tickets {
+        id
+        kandanColumnId
+        title
+        comments {
+          text
+        }
+      }
+    }
+  }
 }
     `;
-export type VoteMutationFn = Apollo.MutationFunction<VoteMutation, VoteMutationVariables>;
 
 /**
- * __useVoteMutation__
+ * __useBoardQuery__
  *
- * To run a mutation, you first call `useVoteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useVoteMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
+ * To run a query within a React component, call `useBoardQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBoardQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const [voteMutation, { data, loading, error }] = useVoteMutation({
+ * const { data, loading, error } = useBoardQuery({
  *   variables: {
- *      value: // value for 'value'
- *      postId: // value for 'postId'
+ *      id: // value for 'id'
  *   },
  * });
  */
-export function useVoteMutation(baseOptions?: Apollo.MutationHookOptions<VoteMutation, VoteMutationVariables>) {
-        return Apollo.useMutation<VoteMutation, VoteMutationVariables>(VoteDocument, baseOptions);
+export function useBoardQuery(baseOptions?: Apollo.QueryHookOptions<BoardQuery, BoardQueryVariables>) {
+        return Apollo.useQuery<BoardQuery, BoardQueryVariables>(BoardDocument, baseOptions);
       }
-export type VoteMutationHookResult = ReturnType<typeof useVoteMutation>;
-export type VoteMutationResult = Apollo.MutationResult<VoteMutation>;
-export type VoteMutationOptions = Apollo.BaseMutationOptions<VoteMutation, VoteMutationVariables>;
+export function useBoardLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BoardQuery, BoardQueryVariables>) {
+          return Apollo.useLazyQuery<BoardQuery, BoardQueryVariables>(BoardDocument, baseOptions);
+        }
+export type BoardQueryHookResult = ReturnType<typeof useBoardQuery>;
+export type BoardLazyQueryHookResult = ReturnType<typeof useBoardLazyQuery>;
+export type BoardQueryResult = Apollo.QueryResult<BoardQuery, BoardQueryVariables>;
 export const MeDocument = gql`
     query Me {
   me {
@@ -984,107 +851,3 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
-export const PostDocument = gql`
-    query Post($id: Int!) {
-  post(id: $id) {
-    id
-    createdAt
-    updatedAt
-    title
-    points
-    text
-    voteStatus
-    creator {
-      id
-      username
-      avatar
-    }
-    comments {
-      id
-      text
-      createdAt
-      updatedAt
-      points
-      creator {
-        username
-        avatar
-      }
-      replies {
-        id
-        text
-        createdAt
-        updatedAt
-        creator {
-          username
-          avatar
-        }
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __usePostQuery__
- *
- * To run a query within a React component, call `usePostQuery` and pass it any options that fit your needs.
- * When your component renders, `usePostQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePostQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function usePostQuery(baseOptions?: Apollo.QueryHookOptions<PostQuery, PostQueryVariables>) {
-        return Apollo.useQuery<PostQuery, PostQueryVariables>(PostDocument, baseOptions);
-      }
-export function usePostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PostQuery, PostQueryVariables>) {
-          return Apollo.useLazyQuery<PostQuery, PostQueryVariables>(PostDocument, baseOptions);
-        }
-export type PostQueryHookResult = ReturnType<typeof usePostQuery>;
-export type PostLazyQueryHookResult = ReturnType<typeof usePostLazyQuery>;
-export type PostQueryResult = Apollo.QueryResult<PostQuery, PostQueryVariables>;
-export const PostsDocument = gql`
-    query Posts($limit: Int!, $column: String!, $order: String!, $cursor: String) {
-  posts(cursor: $cursor, column: $column, order: $order, limit: $limit) {
-    hasMore
-    posts {
-      ...PostSnippet
-    }
-  }
-}
-    ${PostSnippetFragmentDoc}`;
-
-/**
- * __usePostsQuery__
- *
- * To run a query within a React component, call `usePostsQuery` and pass it any options that fit your needs.
- * When your component renders, `usePostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePostsQuery({
- *   variables: {
- *      limit: // value for 'limit'
- *      column: // value for 'column'
- *      order: // value for 'order'
- *      cursor: // value for 'cursor'
- *   },
- * });
- */
-export function usePostsQuery(baseOptions?: Apollo.QueryHookOptions<PostsQuery, PostsQueryVariables>) {
-        return Apollo.useQuery<PostsQuery, PostsQueryVariables>(PostsDocument, baseOptions);
-      }
-export function usePostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PostsQuery, PostsQueryVariables>) {
-          return Apollo.useLazyQuery<PostsQuery, PostsQueryVariables>(PostsDocument, baseOptions);
-        }
-export type PostsQueryHookResult = ReturnType<typeof usePostsQuery>;
-export type PostsLazyQueryHookResult = ReturnType<typeof usePostsLazyQuery>;
-export type PostsQueryResult = Apollo.QueryResult<PostsQuery, PostsQueryVariables>;
